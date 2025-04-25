@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Interactive Form with Validation</title>
+<style>
+  .error {
+    color: red;
+  }
+  #modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border: 1px solid black;
+  }
+ </style>
+ </head>
+ <body>
+
+ <h1>Interactive Form</h1>
+
+ <form id="myForm">
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name" required><br>
+  <span id="nameError" class="error"></span><br>
+
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="email" required><br>
+  <span id="emailError" class="error"></span><br>
+
+  <button type="submit">Submit</button>
+</form>
+
+<div id="modal">
+  <h2>Thank You!</h2>
+  <p>Your form has been submitted.</p>
+  <button onclick="closeModal()">Close</button>
+</div>
+
+
+<button onclick="showFunFact()">Show Fun Fact</button>
+<p id="funFact"></p>
+
+
+
+<script>
+function validateEmail(email) {
+  // Basic email validation (you might want a stronger regex)
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function showFunFact() {
+  const facts = [
+    "A cat has 32 muscles in each ear.",
+    "A shrimp's heart is in its head.",
+    "It snows metal on Venus."
+  ];
+  const randomFact = facts[Math.floor(Math.random() * facts.length)];
+  document.getElementById("funFact").textContent = randomFact;
+}
+
+
+
+function validateForm(event) {
+  event.preventDefault(); // Prevent immediate form submission
+
+  let isValid = true;
+  const nameInput = document.getElementById("name");
+  const emailInput = document.getElementById("email");
+  const nameError = document.getElementById("nameError");
+  const emailError = document.getElementById("emailError");
+
+
+  if (nameInput.value.trim() === "") {
+    nameError.textContent = "Name is required.";
+    isValid = false;
+  } else {
+    nameError.textContent = ""; 
+  }
+
+  if (emailInput.value.trim() === "") {
+    emailError.textContent = "Email is required.";
+    isValid = false;
+  } else if (!validateEmail(emailInput.value.trim())) {
+    emailError.textContent = "Invalid email format.";
+    isValid = false;
+  } else {
+    emailError.textContent = "";
+  }
+
+
+  if (isValid) {
+    showModal(); // If validation passes, show the modal
+  }
+}
+
+
+function showModal() {
+  document.getElementById("modal").style.display = "block";
+}
+
+function closeModal() {
+  document.getElementById("modal").style.display = "none";
+  document.getElementById("myForm").reset(); // Clear the form
+}
+
+document.getElementById("myForm").addEventListener("submit", validateForm);
+
+
+</script>
+
+</body>
+</html>
